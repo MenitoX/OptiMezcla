@@ -4,16 +4,18 @@ from random import randint,uniform
 
 
 __PRIMES__ = {
-    "Amarillo":800,
-    "Azul":600,
-    "Blanco":1000,
-    "Negro":900,
-    "Rojo":600
+    "Amarillo":8000,
+    "Azul":6000,
+    "Blanco":10000,
+    "Negro":9000,
+    "Rojo":6000,
+    "Verde":4000,
+    "Memito":11000
 }
 
 __LOWER_P_LIMIT__ = 0
 __UPPER_P_LIMIT__ = 99
-__N_PRIMES__ = 5
+__N_PRIMES__ = 7
 
 def truncate(num,n):
     temp = str(num)
@@ -29,26 +31,23 @@ def createTest():
     nFinalVariables = int(input("Cantidad de Variables: "))
     file = open("muestra.lp", "w")
     file.write("max: ")
-    variableList = createRandomVariableAndUtility(nFinalVariables, file)
+    createRandomVariableAndUtility(nFinalVariables, file)
     requirementsList = []
     for i in range(nFinalVariables):
         requirementsList.append(createRequirements(requirementsList, file))
-    printList(requirementsList)
-    createRestrictions(requirementsList, nFinalVariables, file)
+    #printList(requirementsList)
+    createRestrictions(requirementsList, file)
     file.close()
 
 def createRandomVariableAndUtility(nFinalVariables : int, file : TextIOWrapper):
-    variablesList = []
     for i in range(nFinalVariables):
         name = "x"+str(i+1)
-        utility = randint(10000,20000)
-        variablesList.append([name,utility])
-        
+        utility = randint(10000,20000)       
         if i == nFinalVariables-1:
             file.write(str(utility)+str(name)+";\n")
         else:
             file.write(str(utility)+str(name)+"+")
-    return variablesList
+    return 
     
 def createRequirements(requirementsList : list, file : TextIOWrapper):
     usedPrimes = []
@@ -68,9 +67,9 @@ def createRequirements(requirementsList : list, file : TextIOWrapper):
 
         if percentage != 0:
             # Repeated colors verifier
-            primeColor = primeColors[randint(0,4)]
+            primeColor = primeColors[randint(0,__N_PRIMES__-1)]
             while primeColor in usedPrimes:
-                primeColor = primeColors[randint(0,4)]
+                primeColor = primeColors[randint(0,__N_PRIMES__-1)]
             usedPrimes.append(primeColor)
                    
             auxList.append([primeColor,truncate(float(percentage/100.00),2)])
@@ -80,20 +79,20 @@ def createRequirements(requirementsList : list, file : TextIOWrapper):
     else:
         return auxList
             
-def createRestrictions(requirementList : list, nFinalVariables : int, file : TextIOWrapper):
+def createRestrictions(requirementList : list, file : TextIOWrapper):
     primeColors = list(__PRIMES__.keys())
-    for i in range(__N_PRIMES__):
-        restrictionString = ""
-        selectedColor = primeColors[i]
-        print(selectedColor)
-        nVariable = 1
-        for requirement in requirementList:
-            for color,value in requirement:
-                if selectedColor == color:
-                    restrictionString += str(value)+"x"+str(nVariable)+"+"
-            nVariable+=1
-        restrictionString = restrictionString[:-1]+"<="+str(__PRIMES__[selectedColor])+";\n"
-        file.write(restrictionString)
+    colorsDic = {}
+    for key in primeColors:
+        colorsDic.setdefault(key, "")
+    
+    nVariable = 1
+    for requirement in requirementList:
+        for color,value in requirement:
+            colorsDic[color] += str(value)+"x"+str(nVariable)+"+" 
+        nVariable+=1
+    for key in primeColors:
+        colorsDic[key] = colorsDic[key][:-1]+"<="+str(__PRIMES__[key])+";\n"
+        file.write(colorsDic[key])
         
 
 
