@@ -12,6 +12,8 @@ __PRIMES__ = {
     "Verde":4000
 }
 
+__LOWER_UTILITY__ = 10000
+__UPPER_UTILITY__ = 20000
 __LOWER_P_LIMIT__ = 0
 __UPPER_P_LIMIT__ = 99
 __N_PRIMES__ = len(__PRIMES__)
@@ -39,11 +41,12 @@ def createTest():
     createRestrictions(requirementsList, file)
     file.close()
 
-# Crea variables junto a su utilidad en un rango específico
+# Crea variables junto a su utilidad en un rango específico,
+# y forma la función objetivo
 def createRandomVariableAndUtility(nFinalVariables : int, file : TextIOWrapper):
     for i in range(nFinalVariables):
         name = "x"+str(i+1)
-        utility = randint(10000,20000)       
+        utility = randint(__LOWER_UTILITY__,__UPPER_UTILITY__)       
         if i == nFinalVariables-1:
             file.write(str(utility)+str(name)+";\n")
         else:
