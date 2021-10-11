@@ -19,7 +19,6 @@ __LOWER_P_LIMIT__ = 0
 __UPPER_P_LIMIT__ = 99
 
 
-
 # Función para truncar Floats
 def truncate(num : float , n : int):
     temp = str(num)
@@ -70,7 +69,10 @@ def createRandomVariableAndUtility(nFinalVariables : int, file : TextIOWrapper):
 def createRequirements(requirementsList : list, file : TextIOWrapper):
     usedPrimes = []
     auxList = []
-    cuantityOfPrimes = randint(2, __N_PRIMES__)
+    if __N_PRIMES__ != 2:
+        cuantityOfPrimes = randint(2, __N_PRIMES__)
+    else:
+        cuantityOfPrimes = 2
     totalRequirement = 100
     primeColors = list(__PRIMES__.keys())
 
@@ -95,7 +97,8 @@ def createRequirements(requirementsList : list, file : TextIOWrapper):
     # Este sort permite que las materias primas siempre estén en el mismo orden para
     # poder comparar si ya existen en la lista de requerimientos 
     auxList.sort()
-    if auxList in requirementsList:
+
+    if auxList in requirementsList or len(auxList) == 1:
         return createRequirements(requirementsList, file)
     else:
         return auxList
@@ -120,4 +123,3 @@ def createRestrictions(requirementList : list, file : TextIOWrapper):
 if '__main__' == __name__:
     createTest()
     print("Finished creating test")
-    
