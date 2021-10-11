@@ -7,6 +7,8 @@ from time import time
 __PRIMES__ = {}
 __N_PRIMES__ = 0
 
+__START_TIME__ = 0
+
 # Constantes
 
     # Cambiables #
@@ -34,8 +36,10 @@ def truncate(num : float , n : int):
 # Función main
 def createTest():
     global __N_PRIMES__
+    global __START_TIME__
     nFinalVariables = int(input("Cantidad de Variables: "))
     __N_PRIMES__ = int(input("Cantidad de materias primas: "))
+    __START_TIME__ = time()
     file = open("muestra.lp", "w")
     file.write("max: ")
     createPrimes()
@@ -122,6 +126,5 @@ def createRestrictions(requirementList : list, file : TextIOWrapper):
             file.write(colorsDic[key])
         
 if '__main__' == __name__:
-    start_time = time()
     createTest()
-    print("Finished creating test in %s seconds" % (time()-start_time))
+    print("Finished creating test in %s seconds" % (time()-__START_TIME__))
