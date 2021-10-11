@@ -1,7 +1,7 @@
 from io import TextIOWrapper
-from random import randint,uniform
+from random import randint
 
-
+# Constantes
 
 __PRIMES__ = {
     "Amarillo":8000,
@@ -9,15 +9,15 @@ __PRIMES__ = {
     "Blanco":10000,
     "Negro":9000,
     "Rojo":6000,
-    "Verde":4000,
-    "Memito":11000
+    "Verde":4000
 }
 
 __LOWER_P_LIMIT__ = 0
 __UPPER_P_LIMIT__ = 99
-__N_PRIMES__ = 7
+__N_PRIMES__ = len(__PRIMES__)
 
-def truncate(num,n):
+# Función para truncar Floats
+def truncate(num : float , n : int):
     temp = str(num)
     for x in range(len(temp)):
         if temp[x] == '.':
@@ -27,6 +27,7 @@ def truncate(num,n):
                 return float(temp)      
     return float(temp)
 
+# Función main
 def createTest():
     nFinalVariables = int(input("Cantidad de Variables: "))
     file = open("muestra.lp", "w")
@@ -35,10 +36,10 @@ def createTest():
     requirementsList = []
     for i in range(nFinalVariables):
         requirementsList.append(createRequirements(requirementsList, file))
-    #printList(requirementsList)
     createRestrictions(requirementsList, file)
     file.close()
 
+# Crea variables junto a su utilidad en un rango específico
 def createRandomVariableAndUtility(nFinalVariables : int, file : TextIOWrapper):
     for i in range(nFinalVariables):
         name = "x"+str(i+1)
@@ -48,7 +49,9 @@ def createRandomVariableAndUtility(nFinalVariables : int, file : TextIOWrapper):
         else:
             file.write(str(utility)+str(name)+"+")
     return 
-    
+
+# Crea los requerimientos de cada variable, o sea el porcentaje de materias
+# primas por variable    
 def createRequirements(requirementsList : list, file : TextIOWrapper):
     usedPrimes = []
     auxList = []
@@ -73,12 +76,16 @@ def createRequirements(requirementsList : list, file : TextIOWrapper):
             usedPrimes.append(primeColor)
                    
             auxList.append([primeColor,truncate(float(percentage/100.00),2)])
+    
+    # Este sort permite que las materias primas siempre estén en el mismo orden para
+    # poder comparar si ya existen en la lista de requerimientos 
     auxList.sort()
     if auxList in requirementsList:
         return createRequirements(requirementsList, file)
     else:
         return auxList
-            
+
+# Crea las restricciones de cada materia prima respecto a la lista de requerimientos
 def createRestrictions(requirementList : list, file : TextIOWrapper):
     primeColors = list(__PRIMES__.keys())
     colorsDic = {}
@@ -94,15 +101,7 @@ def createRestrictions(requirementList : list, file : TextIOWrapper):
         colorsDic[key] = colorsDic[key][:-1]+"<="+str(__PRIMES__[key])+";\n"
         file.write(colorsDic[key])
         
-
-
-def printList(list):
-    for i in list:
-        print(i)
-        
-
 if '__main__' == __name__:
     createTest()
     print("Finished creating test")
-    
     
