@@ -1,22 +1,24 @@
 from io import TextIOWrapper
 from random import randint
 
+# Variables Globales
+
+__PRIMES__ = {}
+__N_PRIMES__ = 0
+
 # Constantes
 
-__PRIMES__ = {
-    "Amarillo":8000,
-    "Azul":6000,
-    "Blanco":10000,
-    "Negro":9000,
-    "Rojo":6000,
-    "Verde":4000
-}
-
+    # Cambiables #
+__LOWER_AVAILABILITY__ = 5000
+__UPPER_AVAILABILITY__ = 10000
 __LOWER_UTILITY__ = 10000
 __UPPER_UTILITY__ = 20000
+
+    # No tocar #
 __LOWER_P_LIMIT__ = 0
 __UPPER_P_LIMIT__ = 99
-__N_PRIMES__ = len(__PRIMES__)
+
+
 
 # Función para truncar Floats
 def truncate(num : float , n : int):
@@ -31,15 +33,25 @@ def truncate(num : float , n : int):
 
 # Función main
 def createTest():
+    global __N_PRIMES__
     nFinalVariables = int(input("Cantidad de Variables: "))
+    __N_PRIMES__ = int(input("Cantidad de materias primas: "))
     file = open("muestra.lp", "w")
     file.write("max: ")
+    createPrimes()
     createRandomVariableAndUtility(nFinalVariables, file)
     requirementsList = []
     for i in range(nFinalVariables):
         requirementsList.append(createRequirements(requirementsList, file))
     createRestrictions(requirementsList, file)
     file.close()
+
+# Crea las materias primas
+def createPrimes():
+    global __PRIMES__
+    for i in range(__N_PRIMES__):
+        key = "color"+str(i+1)
+        __PRIMES__[key] = randint(__LOWER_AVAILABILITY__, __UPPER_AVAILABILITY__)
 
 # Crea variables junto a su utilidad en un rango específico,
 # y forma la función objetivo
