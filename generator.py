@@ -113,8 +113,9 @@ def createRestrictions(requirementList : list, file : TextIOWrapper):
             colorsDic[color] += str(value)+"x"+str(nVariable)+"+" 
         nVariable+=1
     for key in primeColors:
-        colorsDic[key] = colorsDic[key][:-1]+"<="+str(__PRIMES__[key])+";\n"
-        file.write(colorsDic[key])
+        if colorsDic[key] != "":
+            colorsDic[key] = colorsDic[key][:-1]+"<="+str(__PRIMES__[key])+";\n"
+            file.write(colorsDic[key])
         
 if '__main__' == __name__:
     createTest()
