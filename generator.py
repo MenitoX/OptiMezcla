@@ -1,5 +1,6 @@
 from io import TextIOWrapper
 from random import randint
+from time import time
 
 # Variables Globales
 
@@ -121,5 +122,6 @@ def createRestrictions(requirementList : list, file : TextIOWrapper):
             file.write(colorsDic[key])
         
 if '__main__' == __name__:
+    start_time = time()
     createTest()
-    print("Finished creating test")
+    print("Finished creating test in %s seconds" % (time()-start_time))
